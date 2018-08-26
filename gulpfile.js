@@ -143,6 +143,8 @@ gulp.task('publish', () => {
     return del('tmp/.git');
   }
 
+  // using an https repo means that it will ask for
+  // a username and password when publishing... so that's fun
   const script = `
 git init
 git config user.name "${copyright}"
