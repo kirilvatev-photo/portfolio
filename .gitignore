@@ -39,3 +39,6 @@ coverage/
 
 # site source images
 images/
+
+# site build location
+tmp/
