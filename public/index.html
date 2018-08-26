@@ -14,12 +14,6 @@
       color: white;
       font-family: sans-serif;
       font-size: 1em;
-
-      background-image: url(images/raccoon.jpg);
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
     }
 
     article {
@@ -33,6 +27,12 @@
       text-align: center;
 
       background: rgba(163, 157, 153, 0.7);
+
+      background-image: url(images/raccoon.jpg);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
 
     main {
@@ -67,6 +67,19 @@
     .subtitle {
       font-size: 1.2rem;
     }
+
+    .gallery {
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    img {
+      display: block;
+      max-width: 90vw;
+      max-height: 90vh;
+      padding: 40px 0;
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -82,5 +95,13 @@
       footer
     </footer>
   </article>
+
+  <div class="gallery">
+    <img src="images/hawk-in-tree.jpg" alt="">
+    <img src="images/king-duck.jpg" alt="">
+    <img src="images/raccoon.jpg" alt="">
+    <img src="images/one.jpg" alt="">
+    <img src="images/two.jpg" alt="">
+  </div>
 </body>
 </html>
