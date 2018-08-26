@@ -36,3 +36,6 @@ Temporary Items
 node_modules/
 coverage/
 .nyc_output/
+
+# site source images
+images/
