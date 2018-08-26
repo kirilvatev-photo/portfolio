@@ -114,7 +114,7 @@ gulp.task('build:images', () => {
 });
 
 gulp.task('build:files', () => {
-  return gulp.src(['index.html', '404.html'])
+  return gulp.src(['public/**/*'])
     .pipe(gulp.dest('tmp'));
 });
 
