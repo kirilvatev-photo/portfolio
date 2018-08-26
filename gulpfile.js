@@ -8,7 +8,9 @@ const del = require('del');
 const mapStream = require('read-vinyl-file-stream');
 const Jimp = require('jimp');
 const prettyBytes = require('pretty-bytes');
+const prettyMs = require('pretty-ms');
 const chalk = require('chalk');
+const log = require('fancy-log');
 
 function size(bytes, useColor = false) {
   const color = !useColor ? (v) => v :
@@ -17,10 +19,15 @@ function size(bytes, useColor = false) {
   return color(prettyBytes(bytes));
 }
 
+function time(ms) {
+  return chalk.magenta(prettyMs(ms));
+}
+
 function optimizeImages() {
   return mapStream((content, file, stream, cb) => {
     const originalSize = content.length;
     const name = path.basename(file.path);
+    const start = Date.now();
 
     Jimp.read(content)
     .then(img => {
@@ -42,8 +49,9 @@ function optimizeImages() {
     })
     .then(buffer => {
       const newSize = buffer.length;
+      const end = Date.now();
 
-      console.log(chalk.gray(`'${chalk.cyan(name)}': ${size(originalSize)} -> ${size(newSize)} (${size(newSize - originalSize, true)})`));
+      log(chalk.gray(`'${chalk.cyan(name)}': ${size(originalSize)} -> ${size(newSize)} (${size(newSize - originalSize, true)}) in ${time(end - start)}`));
 
       cb(null, buffer);
     })
