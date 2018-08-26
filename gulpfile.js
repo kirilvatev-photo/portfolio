@@ -7,6 +7,15 @@ const sequence = require('gulp-sequence');
 const del = require('del');
 const mapStream = require('read-vinyl-file-stream');
 const Jimp = require('jimp');
+const prettyBytes = require('pretty-bytes');
+const chalk = require('chalk');
+
+function size(bytes, useColor = false) {
+  const color = !useColor ? (v) => v :
+    bytes < 0 ? chalk.green : chalk.red;
+
+  return color(prettyBytes(bytes));
+}
 
 function optimizeImages() {
   return mapStream((content, file, stream, cb) => {
@@ -34,7 +43,7 @@ function optimizeImages() {
     .then(buffer => {
       const newSize = buffer.length;
 
-      console.log(`${name}: ${originalSize} -> ${newSize} (${newSize - originalSize})`);
+      console.log(chalk.gray(`'${chalk.cyan(name)}': ${size(originalSize)} -> ${size(newSize)} (${size(newSize - originalSize, true)})`));
 
       cb(null, buffer);
     })
@@ -54,6 +63,12 @@ gulp.task('build:images', () => {
     .pipe(gulp.dest('tmp/images'));
 });
 
+gulp.task('build:files', () => {
+  return gulp.src(['index.html', '404.html'])
+    .pipe(gulp.dest('tmp'));
+});
+
 gulp.task('build', ['clean'], sequence(
+  'build:files',
   'build:images'
 ));

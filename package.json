@@ -23,11 +23,13 @@
     "express": "^4.16.3"
   },
   "devDependencies": {
+    "chalk": "^2.4.1",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-imagemin": "^4.1.0",
     "gulp-sequence": "^1.0.0",
     "jimp": "^0.3.7",
+    "pretty-bytes": "^5.1.0",
     "read-vinyl-file-stream": "^2.0.3"
   }
 }
