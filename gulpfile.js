@@ -11,6 +11,7 @@ const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
 const chalk = require('chalk');
 const log = require('fancy-log');
+const piexif = require('piexifjs');
 
 function size(bytes, useColor = false) {
   const color = !useColor ? (v) => v :
@@ -61,6 +62,42 @@ function optimizeImages() {
   }, 'buffer');
 }
 
+function addCopyright() {
+  return mapStream((content, file, stream, cb) => {
+    const name = path.basename(file.path);
+    const start = Date.now();
+
+    let data;
+
+    try {
+      const zeroth = {};
+      const exif = {};
+
+      zeroth[piexif.ImageIFD.Copyright] = 'Kiril Vatev';
+
+      const exifStr = piexif.dump({
+        '0th': zeroth, 'Exif': exif
+      });
+
+      let dataStr = piexif.insert(exifStr, content.toString('binary'));
+
+      data = Buffer.from(dataStr, 'binary');
+    } catch (e) {
+      console.log('copyright error:', e);
+      process.exitCode = 1;
+    }
+
+    let end = Date.now();
+
+    if (data) {
+      log(`'${name}': added copyright ${time(end - start)}`);
+      cb(null, data);
+    } else {
+      cb(null, content);
+    }
+  }, 'buffer');
+}
+
 gulp.task('clean', () => {
   return del(['tmp']);
 });
@@ -68,6 +105,7 @@ gulp.task('clean', () => {
 gulp.task('build:images', () => {
   return gulp.src('images/*.jpg')
     .pipe(optimizeImages())
+    .pipe(addCopyright())
     .pipe(gulp.dest('tmp/images'));
 });
 
