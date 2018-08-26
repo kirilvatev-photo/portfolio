@@ -12,8 +12,10 @@ const prettyMs = require('pretty-ms');
 const chalk = require('chalk');
 const log = require('fancy-log');
 const piexif = require('piexifjs');
+const shellton = require('shellton');
 
 const copyright = 'Kiril Vatev';
+const repo = 'https://github.com/kirilvatev-photo/portfolio.git';
 
 function size(bytes, useColor = false) {
   const color = !useColor ? (v) => v :
@@ -122,3 +124,36 @@ gulp.task('build', ['clean'], sequence(
   'build:files',
   'build:images'
 ));
+
+gulp.task('publish', () => {
+  function exec(line) {
+    console.log(chalk.green(line));
+    return new Promise((resolve, reject) => {
+      shellton({
+        task: line,
+        cwd: path.resolve(__dirname, 'tmp'),
+        stdin: 'inherit',
+        stdout: 'inherit',
+        stderr: 'inherit'
+      }, (err) => err ? reject(err) : resolve());
+    });
+  }
+
+  function clean() {
+    return del('tmp/.git');
+  }
+
+  const script = `
+git init
+git config user.name "${copyright}"
+git config user.email "contact@kirilvatev.com"
+git add .
+git commit -m "automatic publishing"
+git remote add origin ${repo}
+git push --force -u origin master:gh-pages
+`.trim();
+
+  return script.split('\n').map(v => v.trim()).reduce((prom, line) => {
+    return prom.then(() => exec(line));
+  }, clean).then(() => clean());
+});

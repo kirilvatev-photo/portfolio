@@ -33,6 +33,7 @@
     "piexifjs": "^1.0.4",
     "pretty-bytes": "^5.1.0",
     "pretty-ms": "^3.2.0",
-    "read-vinyl-file-stream": "^2.0.3"
+    "read-vinyl-file-stream": "^2.0.3",
+    "shellton": "^4.1.0"
   }
 }
