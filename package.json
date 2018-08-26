@@ -6,6 +6,7 @@
   "scripts": {
     "build": "gulp build",
     "gulp": "gulp",
+    "publish": "gulp publish",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
