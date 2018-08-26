@@ -13,6 +13,8 @@ const chalk = require('chalk');
 const log = require('fancy-log');
 const piexif = require('piexifjs');
 
+const copyright = 'Kiril Vatev';
+
 function size(bytes, useColor = false) {
   const color = !useColor ? (v) => v :
     bytes < 0 ? chalk.green : chalk.red;
@@ -33,7 +35,7 @@ function addCopyright(buffer, name) {
     const zeroth = {};
     const exif = {};
 
-    zeroth[piexif.ImageIFD.Copyright] = 'Kiril Vatev';
+    zeroth[piexif.ImageIFD.Copyright] = copyright;
 
     const exifStr = piexif.dump({
       '0th': zeroth, 'Exif': exif
