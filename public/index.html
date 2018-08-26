@@ -3,8 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <title>Kiril Vatev Photography</title>
+
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+
+      color: white;
+      font-family: sans-serif;
+      font-size: 1em;
+
+      background-image: url(images/raccoon.jpg);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    article {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+
+      width: 100%;
+      min-height: 100%;
+
+      text-align: center;
+
+      background: rgba(163, 157, 153, 0.7);
+    }
+
+    main {
+      flex-grow: 1;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    header {
+      padding: 30px 0;
+    }
+
+    footer {
+      padding: 30px 0;
+    }
+
+    header, main, footer {
+      flex-shrink: 0;
+    }
+
+    .name {
+      font-size: 2rem;
+    }
+
+    .title {
+      font-size: 5rem;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+    }
+  </style>
 </head>
 <body>
-Index page
+  <article>
+    <header>
+      <div class="name">Kiril Vatev</div>
+    </header>
+    <main>
+      <div class="title">Hi. I'm Kiril.</div>
+      <div class="subtitle">Nice to meet you.</div>
+    </main>
+    <footer>
+      footer
+    </footer>
+  </article>
 </body>
 </html>
