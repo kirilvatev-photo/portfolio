@@ -158,7 +158,7 @@ gulp.task('publish', () => {
   }
 
   function clean() {
-    return fs.remove('tmp');
+    return fs.remove('tmp/.git');
   }
 
   // using an https repo means that it will ask for
