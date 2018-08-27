@@ -157,5 +157,5 @@ git push --force -u origin master:gh-pages
 
   return script.split('\n').map(v => v.trim()).reduce((prom, line) => {
     return prom.then(() => exec(line));
-  }, clean).then(() => clean());
+  }, clean()).then(() => clean());
 });
