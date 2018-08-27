@@ -5,13 +5,13 @@ const fs = require('fs-extra');
 const gulp = require('gulp');
 const sequence = require('gulp-sequence');
 const Jimp = require('jimp');
+const piexif = require('piexifjs');
+const shellton = require('shellton');
+const globby = require('globby');
 const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
 const chalk = require('chalk');
 const log = require('fancy-log');
-const piexif = require('piexifjs');
-const shellton = require('shellton');
-const globby = require('globby');
 
 const copyright = 'Kiril Vatev';
 const repo = 'https://github.com/kirilvatev-photo/portfolio.git';
@@ -145,6 +145,7 @@ gulp.task('build', ['clean'], sequence(
 gulp.task('publish', () => {
   function exec(line) {
     console.log(chalk.green(line));
+
     return new Promise((resolve, reject) => {
       shellton({
         task: line,
