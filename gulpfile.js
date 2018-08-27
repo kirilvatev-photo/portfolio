@@ -1,10 +1,9 @@
-/* jshint node: true, esversion: 6 */
+/* jshint node: true, esversion: 6, unused: true */
 const path = require('path');
+const fs = require('fs-extra');
 
 const gulp = require('gulp');
 const sequence = require('gulp-sequence');
-const del = require('del');
-const mapStream = require('read-vinyl-file-stream');
 const Jimp = require('jimp');
 const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
@@ -12,6 +11,7 @@ const chalk = require('chalk');
 const log = require('fancy-log');
 const piexif = require('piexifjs');
 const shellton = require('shellton');
+const globby = require('globby');
 
 const copyright = 'Kiril Vatev';
 const repo = 'https://github.com/kirilvatev-photo/portfolio.git';
@@ -63,55 +63,73 @@ function addCopyright(buffer, name) {
   return buffer;
 }
 
-function optimizeImages() {
-  return mapStream((content, file, stream, cb) => {
-    const originalSize = content.length;
-    const name = path.basename(file.path);
-    const start = Date.now();
+function optimizeImage(fileBuffer, name) {
+  const originalSize = fileBuffer.length;
+  const start = Date.now();
 
-    Jimp.read(content)
-    .then(img => {
-      const targetSize = 2500;
-      const { width, height } = img.bitmap;
+  return Jimp.read(fileBuffer)
+  .then(img => {
+    const targetSize = 2500;
+    const { width, height } = img.bitmap;
 
-      if (width > height && width > targetSize) {
-        img.resize(targetSize, Jimp.AUTO);
-      } else if (height > targetSize) {
-        img.resize(Jimp.AUTO, targetSize);
-      }
+    if (width > height && width > targetSize) {
+      img.resize(targetSize, Jimp.AUTO);
+    } else if (height > targetSize) {
+      img.resize(Jimp.AUTO, targetSize);
+    }
 
-      img.quality(85);
+    img.quality(85);
 
-      return img;
-    })
-    .then(img => {
-      return img.getBufferAsync(Jimp.MIME_JPEG);
-    })
-    .then(buffer => {
-      return addCopyright(buffer, name);
-    })
-    .then(buffer => {
-      const newSize = buffer.length;
-      const end = Date.now();
+    return img;
+  })
+  .then(img => {
+    return img.getBufferAsync(Jimp.MIME_JPEG);
+  })
+  .then(resultBuffer => {
+    return addCopyright(resultBuffer, name);
+  })
+  .then(resultBuffer => {
+    const newSize = resultBuffer.length;
+    const end = Date.now();
 
-      log(chalk.gray(`'${chalk.cyan(name)}': ${size(originalSize)} -> ${size(newSize)} (${size(newSize - originalSize, true)}) in ${time(end - start)}`));
+    log(chalk.gray(`'${chalk.cyan(name)}': ${size(originalSize)} -> ${size(newSize)} (${size(newSize - originalSize, true)}) in ${time(end - start)}`));
 
-      cb(null, buffer);
-    })
-    .catch(err => {
-      cb(err);
-    });
-  }, 'buffer');
+    return resultBuffer;
+  });
 }
 
 gulp.task('clean', () => {
-  return del(['tmp']);
+  return fs.remove('tmp');
 });
 
 gulp.task('build:images', () => {
-  return gulp.src('images/*.jpg')
-    .pipe(optimizeImages())
-    .pipe(gulp.dest('tmp/images'));
+  // We can't use gulp here. The vinyl streams like to
+  // read files and keep a lot of stuff in memory. Since images
+  // can be as high as 20-30MB and there can be tens of them,
+  // that's quite a bit of memory. It often resulted in memory or
+  // segfault errors on both Windows and Linux. As a bonus, doing
+  // it manually is also faster
+  const outdir = path.resolve(__dirname, 'tmp/images');
+
+  return fs.ensureDir(outdir)
+  .then(() => {
+    return globby('images/*.jpg');
+  })
+  .then(files => {
+    return files.reduce((prom, file) => {
+      const name = path.basename(file);
+
+      return prom.then(() => {
+        return fs.readFile(file)
+        .then(buffer => {
+          return optimizeImage(buffer, name);
+        })
+        .then(result => {
+          return fs.writeFile(path.resolve(__dirname, 'tmp/images', name), result);
+        });
+      });
+    }, Promise.resolve());
+  });
 });
 
 gulp.task('build:files', () => {
@@ -139,7 +157,7 @@ gulp.task('publish', () => {
   }
 
   function clean() {
-    return del('tmp/.git');
+    return fs.remove('tmp');
   }
 
   // using an https repo means that it will ask for
