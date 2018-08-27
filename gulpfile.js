@@ -2,7 +2,6 @@
 const path = require('path');
 
 const gulp = require('gulp');
-const imagemin = require('gulp-imagemin');
 const sequence = require('gulp-sequence');
 const del = require('del');
 const mapStream = require('read-vinyl-file-stream');
