@@ -13,6 +13,9 @@ const prettyMs = require('pretty-ms');
 const chalk = require('chalk');
 const log = require('fancy-log');
 
+const pkg = require('./package.json');
+process.title = pkg.name;
+
 const copyright = 'Kiril Vatev';
 const repo = 'https://github.com/kirilvatev-photo/portfolio.git';
 

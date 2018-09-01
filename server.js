@@ -5,6 +5,9 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 
+const pkg = require('./package.json');
+process.title = pkg.name;
+
 app.use((req, res, next) => {
   console.log(req.method, req.url);
   next();
