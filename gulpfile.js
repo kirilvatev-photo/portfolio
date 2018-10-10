@@ -125,6 +125,8 @@ gulp.task('build:images', () => {
         const name = path.basename(file);
 
         shellton({
+          // gulp treats non -- parameters as task names,
+          // so just add -- to the front as a quick hack
           task: `gulp build:image:single "--${name}" "--${file}" "--${path.resolve(outdir, name)}"`,
           stdout: 'inherit',
           stderr: 'inherit'
