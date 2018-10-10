@@ -12,6 +12,7 @@ const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
 const chalk = require('chalk');
 const log = require('fancy-log');
+const async = require('async');
 
 const pkg = require('./package.json');
 process.title = pkg.name;
@@ -119,19 +120,63 @@ gulp.task('build:images', () => {
     return globby('images/*.jpg');
   })
   .then(files => {
-    return files.reduce((prom, file) => {
-      const name = path.basename(file);
+    return new Promise((resolve, reject) => {
+      async.eachLimit(files, 4, (file, next) => {
+        const name = path.basename(file);
 
-      return prom.then(() => {
-        return fs.readFile(file)
-        .then(buffer => {
-          return optimizeImage(buffer, name);
-        })
-        .then(result => {
-          return fs.writeFile(path.resolve(__dirname, 'tmp/images', name), result);
-        });
+        shellton({
+          task: `gulp build:image:single "--${name}" "--${file}" "--${path.resolve(outdir, name)}"`,
+          stdout: 'inherit',
+          stderr: 'inherit'
+        }, next);
+      }, (err) => {
+        if (err) {
+          return reject(err);
+        }
+
+        return resolve();
       });
-    }, Promise.resolve());
+    });
+
+//    return files.reduce((prom, file) => {
+//      const name = path.basename(file);
+//
+//      return prom.then(() => {
+//        return fs.readFile(file)
+//        .then(buffer => {
+//          return optimizeImage(buffer, name);
+//        })
+//        .then(result => {
+//          return fs.writeFile(path.resolve(__dirname, 'tmp/images', name), result);
+//        });
+//      });
+//    }, Promise.resolve());
+  });
+});
+
+gulp.task('build:image:single', () => {
+  const name = (process.argv[3] || '').slice(2);
+  const inpath = (process.argv[4] || '').slice(2);
+  const outpath = (process.argv[5] || '').slice(2);
+
+  if (!name) {
+    throw new Error('no name was provided');
+  }
+
+  if (!inpath) {
+    throw new Error('no inpath was provided');
+  }
+
+  if (!outpath) {
+    throw new Error('no outpath was provided');
+  }
+
+  return fs.readFile(inpath)
+  .then(buffer => {
+    return optimizeImage(buffer, name);
+  })
+  .then(result => {
+    return fs.writeFile(outpath, result);
   });
 });
 
