@@ -139,20 +139,6 @@ gulp.task('build:images', () => {
         return resolve();
       });
     });
-
-//    return files.reduce((prom, file) => {
-//      const name = path.basename(file);
-//
-//      return prom.then(() => {
-//        return fs.readFile(file)
-//        .then(buffer => {
-//          return optimizeImage(buffer, name);
-//        })
-//        .then(result => {
-//          return fs.writeFile(path.resolve(__dirname, 'tmp/images', name), result);
-//        });
-//      });
-//    }, Promise.resolve());
   });
 });
 
