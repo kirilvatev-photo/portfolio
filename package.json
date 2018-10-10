@@ -22,6 +22,7 @@
   "homepage": "https://github.com/kirilvatev-photo/portfolio#readme",
   "dependencies": {},
   "devDependencies": {
+    "async": "^2.6.1",
     "chalk": "^2.4.1",
     "del": "^3.0.0",
     "express": "^4.16.3",
