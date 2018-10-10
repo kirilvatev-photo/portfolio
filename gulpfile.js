@@ -12,7 +12,7 @@ const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
 const chalk = require('chalk');
 const log = require('fancy-log');
-const async = require('async');
+const asynclib = require('async');
 
 const pkg = require('./package.json');
 process.title = pkg.name;
@@ -121,7 +121,7 @@ gulp.task('build:images', () => {
   })
   .then(files => {
     return new Promise((resolve, reject) => {
-      async.eachLimit(files, 4, (file, next) => {
+      asynclib.eachLimit(files, 4, (file, next) => {
         const name = path.basename(file);
 
         shellton({
