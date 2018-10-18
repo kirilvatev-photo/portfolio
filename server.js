@@ -13,7 +13,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static('public'));
+app.use(express.static('public', {
+  extensions: ['html']
+}));
 app.use('/images', express.static('images'));
 
 app.get('*', (req, res) => {
