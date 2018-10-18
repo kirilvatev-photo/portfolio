@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/kirilvatev-photo/portfolio/issues"
   },
-  "homepage": "https://github.com/kirilvatev-photo/portfolio#readme",
+  "homepage": "https://www.kirilvatev.com/",
   "dependencies": {},
   "devDependencies": {
     "async": "^2.6.1",
