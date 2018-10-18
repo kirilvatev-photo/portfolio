@@ -1,4 +1,4 @@
-# portfolio
+# 📷 portfolio
 
 This is the code for my personal photography portfolio website. It's probably not the most interesting.
 
