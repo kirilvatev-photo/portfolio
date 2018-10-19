@@ -27,6 +27,10 @@ article {
   background-position: center;
 }
 
+article.mobile {
+  background-image: url(images/cover-mobile2.jpg);
+}
+
 main {
   flex-grow: 1;
 
