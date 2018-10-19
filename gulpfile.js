@@ -13,6 +13,8 @@ const prettyMs = require('pretty-ms');
 const chalk = require('chalk');
 const log = require('fancy-log');
 const asynclib = require('async');
+const each = require('gulp-each');
+const mustache = require('mustache');
 
 const pkg = require('./package.json');
 process.title = pkg.name;
@@ -106,7 +108,15 @@ gulp.task('clean', () => {
   return fs.remove('tmp');
 });
 
-gulp.task('build:images', () => {
+gulp.task('favicons', () => {
+  return gulp.src('public/portra-400.svg')
+    .pipe(require('favicons').stream({
+
+    }))
+    .pipe(gulp.dest('temp'));
+});
+
+gulp.task('images', () => {
   // We can't use gulp here. The vinyl streams like to
   // read files and keep a lot of stuff in memory. Since images
   // can be as high as 20-30MB and there can be tens of them,
@@ -127,7 +137,7 @@ gulp.task('build:images', () => {
         shellton({
           // gulp treats non -- parameters as task names,
           // so just add -- to the front as a quick hack
-          task: `gulp build:image:single "--${name}" "--${file}" "--${path.resolve(outdir, name)}"`,
+          task: `gulp image:single "--${name}" "--${file}" "--${path.resolve(outdir, name)}"`,
           stdout: 'inherit',
           stderr: 'inherit'
         }, next);
@@ -142,7 +152,7 @@ gulp.task('build:images', () => {
   });
 });
 
-gulp.task('build:image:single', () => {
+gulp.task('image:single', () => {
   const name = (process.argv[3] || '').slice(2);
   const inpath = (process.argv[4] || '').slice(2);
   const outpath = (process.argv[5] || '').slice(2);
@@ -168,14 +178,56 @@ gulp.task('build:image:single', () => {
   });
 });
 
-gulp.task('build:files', () => {
-  return gulp.src(['public/**/*'])
+gulp.task('html', () => {
+  function getTemplate(name) {
+    return fs.readFileSync(path.resolve(`public/.${name}.html`), 'utf8').trim();
+  }
+
+  function getData(name) {
+    try {
+      return require(path.resolve(`public/.${name}.json`));
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function render(content) {
+    const matches = content.match(/<!-- hint:[a-zA-Z]+ -->/g);
+
+    if (!matches) {
+      return content;
+    }
+
+    [].forEach.call(matches, (hint) => {
+      const name = hint.match(/<!-- hint:([a-zA-Z]+) -->/)[1];
+
+      const template = getTemplate(name);
+      const data = getData(name);
+
+      const render = mustache.render(template, data);
+
+      content = content.replace(hint, render);
+    });
+
+    return content;
+  }
+
+  return gulp.src(['public/**/*.html'])
+    .pipe(each((content, file, cb) => {
+      cb(null, render(content));
+    }))
+    .pipe(gulp.dest('tmp'));
+});
+
+gulp.task('static', () => {
+  return gulp.src(['public/**/*', '!**/*.html'])
     .pipe(gulp.dest('tmp'));
 });
 
 gulp.task('build', ['clean'], sequence(
-  'build:files',
-  'build:images'
+  'static',
+  'html',
+  'images'
 ));
 
 gulp.task('publish', () => {
