@@ -80,14 +80,14 @@ main, section {
 
 .gallery {
   text-align: center;
-  padding: 40px 0;
+  padding: 20px 0;
 }
 
 img {
   display: block;
-  max-width: 90vw;
-  max-height: 90vh;
-  padding: 40px 0;
+  max-width: 100vw;
+  max-height: 96vh;
+  padding: 20px 0;
   margin: 0 auto;
 
   /* stops most people from being
@@ -116,6 +116,12 @@ footer {
 
 footer a, footer a:visited {
   color: #777;
+}
+
+@media screen and (min-width: 900px) {
+  img, .gallery {
+    padding: 40px 0;
+  }
 }
 
 @media screen and (min-width: 600px) {
