@@ -57,8 +57,13 @@ nav a.current {
 }
 
 .icon-link, .icon-link:visited {
-  color: currentColor;
   text-decoration: none;
+}
+
+.icon-link svg {
+  width: 48px;
+  height: 48px;
+  fill: white;
 }
 
 section {
@@ -98,12 +103,6 @@ img {
    * able to save the photo
    */
   pointer-events: none;
-}
-
-a svg {
-  width: 48px;
-  height: 48px;
-  fill: white;
 }
 
 footer {
