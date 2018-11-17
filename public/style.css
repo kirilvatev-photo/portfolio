@@ -56,6 +56,11 @@ nav a.current {
   font-weight: bold;
 }
 
+.icon-link, .icon-link:visited {
+  color: currentColor;
+  text-decoration: none;
+}
+
 section {
   padding: 30px 0;
 }
