@@ -1,0 +1,134 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+
+  color: #eee;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1em;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  width: 100%;
+  min-height: 100%;
+
+  text-align: center;
+
+  background: rgba(163, 157, 153, 0.7);
+
+  background-image: url(images/cover.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+article.mobile {
+  background-image: url(images/cover-mobile.jpg);
+}
+
+main {
+  flex-grow: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+nav, .spacer {
+  flex-grow: 1;
+  line-height: 1.8;
+}
+
+nav a {
+  display: block;
+  color: currentColor;
+  text-decoration: none;
+  font-size: 1.6rem;
+}
+
+nav a.current {
+  font-weight: bold;
+}
+
+.icon-link, .icon-link:visited {
+  text-decoration: none;
+}
+
+.icon-link svg {
+  width: 48px;
+  height: 48px;
+  fill: white;
+}
+
+section {
+  padding: 30px 0;
+}
+
+main, section {
+  flex-shrink: 0;
+}
+
+.name {
+  font-size: 2.2rem;
+}
+
+.title {
+  line-height: 1.4;
+  font-size: 4rem;
+}
+
+.subtitle {
+  font-size: 1.4rem;
+}
+
+.gallery {
+  text-align: center;
+  padding: 20px 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  max-height: 100vh;
+  padding: 20px 0;
+  margin: 0 auto;
+
+  /* stops most people from being
+   * able to save the photo
+   */
+  pointer-events: none;
+}
+
+footer {
+  text-align: center;
+  padding: 15px 10px;
+  color: #777;
+  background: #f5f5f5;
+  font-size: 0.9rem;
+  line-height: 1.4;
+
+  /*text-transform: uppercase;*/
+  /*letter-spacing: 1px;*/
+}
+
+footer a, footer a:visited {
+  color: #777;
+}
+
+@media screen and (min-width: 900px) {
+  img, .gallery {
+    padding: 40px 0;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .title {
+    font-size: 5rem;
+  }
+}

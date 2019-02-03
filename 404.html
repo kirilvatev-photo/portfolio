@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Kiril Vatev Photography</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .container {
+      opacity: 0;
+      display: flex;
+      width: 100%;
+      min-height: 100%;
+      align-content: center;
+      justify-content: center;
+    }
+
+    .container.show {
+      opacity: 1;
+    }
+
+    .splash {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0.01;
+      transition: opacity 3500ms ease;
+      will-change: opacity;
+
+      width: 100%;
+      min-height: 100%;
+
+      background-image: url(/images/404.jpg);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .splash.show {
+      opacity: 1;
+    }
+
+    main {
+      text-align: center;
+    }
+
+    main .title {
+      font-size: 8rem;
+      line-height: 1.4;
+    }
+
+    main .subtitle {
+      font-size: 1.5rem;
+      line-height: 2;
+    }
+
+    main a, main a:visited {
+      display: block;
+      margin-top: 30px;
+      font-size: 2rem;
+      padding: 15px 35px;
+      border: 2px solid orange;
+      border-radius: 10px;
+      background: rgba(34, 34, 34, 0.65);
+      color: #eee;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="splash">
+    <main>
+      <div class="title">404</div>
+      <div class="subtitle">I'm lost. Are you lost?</div>
+      <a href="/">take me home</a>
+    </main>
+  </div>
+
+  <script src="//www.google-analytics.com/analytics.js"></script>
+  <script>
+    (function () {
+      if (window.ga) {
+        // send analytics synchronously
+        var code = 'UA-17159207-10';
+        var tracker = ga.create(code, 'auto');
+        tracker.send('pageview');
+      }
+
+      var splash = document.querySelector('.splash');
+
+      var map = {
+        '/insta': {
+          target: '/'
+        }
+      };
+
+      var path = window.location.pathname;
+
+      if (map[path]) {
+        window.location.href = window.location.origin + map[path].target;
+        return;
+      }
+
+      setTimeout(function () {
+        splash.classList.add('show');
+      }, 100);
+    }());
+  </script>
+</body>
+</html>
